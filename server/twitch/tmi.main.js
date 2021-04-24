@@ -1,8 +1,7 @@
 module.exports = (tmi) => {
-    
   const { client_config } = require("./tmi.config");
 
-  const client = new tmi.Client({
+  const client = tmi.Client({
     options: { debug: false, messagesLogLevel: "info" },
     connection: {
       reconnect: true,
@@ -15,19 +14,9 @@ module.exports = (tmi) => {
     channels: [client_config.channels],
   });
 
-  client.on("message", onMessageHandler);
-  client.on("connected", onConnectedHandler);
-  client.connect();
+  const event = require("./tmi.event");
 
-  function onMessageHandler(channel, userstate, message, self) {
-    if (self) return;
-
-    console.log(userstate);
-  }
-
-  function onConnectedHandler(addr, port) {
-    console.log(`* Connected to ${addr}:${port}`);
-  }
-
+  client.on("message", event.onMessageHandler);
+  client.on("connected", event.onConnectedHandler);
   client.connect();
 };
