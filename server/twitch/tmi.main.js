@@ -13,3 +13,17 @@ const client = new tmi.Client({
   },
   channels: [client_config.channels],
 });
+
+client.on('message', onMessageHandler);
+client.on('connected', onConnectedHandler);
+client.connect();
+
+function onMessageHandler(channel, userstate, message, self) {
+    if(self) return;
+
+    console.log(userstate);
+}
+
+function onConnectedHandler(addr, port) {
+    console.log(`* Connected to ${addr}:${port}`);
+}
